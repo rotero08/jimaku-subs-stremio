@@ -58,6 +58,7 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 	let apiTitle;
 	let episode;
 	let apiId;
+	let isAnime;
 
 	try {
 		if (id.startsWith("kitsu:")) {
@@ -65,23 +66,43 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 			apiId = id.split(":")[1];
 			const urlKitsu = `anime/${apiId}`;
 			const kitsuData = await getKitsuJSON(urlKitsu);
-			apiTitle = kitsuData.data.attributes.canonicalTitle;
+			if (kitsuData.data.attributes.titles.ja_jp) {
+				apiTitle = kitsuData.data.attributes.titles.ja_jp;
+			} else {
+				apiTitle = kitsuData.data.attributes.canonicalTitle;
+			}
+			isAnime = true;
 		} else if (id.startsWith("tt")) {
 			episode = type === "series" ? id.split(":")[2] : 0;
 			apiId = id.split(":")[0];
 			const urlOMDb = `i=${apiId}`;
 			const OMDbdata = await getOMDbJSON(urlOMDb);
+
 			apiTitle = OMDbdata.Title;
+			if (OMDbdata.Genre.includes("Animation")) {
+				isAnime = true;
+			} else {
+				isAnime = false;
+			}
 		}
 		if (!apiTitle) {
 			console.error("Not found any api Title");
 			return { subtitles: [] };
 		}
-		console.log(`Api Title: ${apiTitle}`);
+
+		if (isAnime) {
+			console.log(`${apiTitle} is an anime`);
+		} else {
+			console.log(`${apiTitle} is not an anime`);
+		}
 		console.log(`Fetching api details for ID: ${apiId}`);
 
 		const encodedTitle = encodeURIComponent(apiTitle);
-		const urlJimakuID = `entries/search?query=${encodedTitle}`;
+		let urlJimakuID = `entries/search?query=${encodedTitle}`;
+		if (!isAnime) {
+			urlJimakuID = `${urlJimakuID}&anime=false`;
+		}
+
 		console.log(`Fetching Jimaku ID from: ${urlJimakuID}`);
 		const jimakuData = await getJimakuIDJSON(urlJimakuID);
 		const jimakuID = jimakuData[0]?.id;
