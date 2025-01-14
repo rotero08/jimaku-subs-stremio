@@ -1,5 +1,6 @@
 const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
 const bent = require("bent");
+const { convertAssToSrtFromUrltoJimaku } = require("./assToSrtFromUrl.js");
 
 const getKitsuJSON = bent("https://kitsu.io/api/edge/", "GET", "json", {
 	Accept: "application/vnd.api+json",
@@ -59,6 +60,7 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 	let episode;
 	let apiId;
 	let isAnime;
+	let fallbackApiTitle;
 
 	try {
 		if (id.startsWith("kitsu:")) {
@@ -68,6 +70,7 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 			const kitsuData = await getKitsuJSON(urlKitsu);
 			if (kitsuData.data.attributes.titles.ja_jp) {
 				apiTitle = kitsuData.data.attributes.titles.ja_jp;
+				fallbackApiTitle = kitsuData.data.attributes.canonicalTitle;
 			} else {
 				apiTitle = kitsuData.data.attributes.canonicalTitle;
 			}
@@ -97,19 +100,30 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 		}
 		console.log(`Fetching api details for ID: ${apiId}`);
 
-		const encodedTitle = encodeURIComponent(apiTitle);
+		let encodedTitle = encodeURIComponent(apiTitle);
 		let urlJimakuID = `entries/search?query=${encodedTitle}`;
 		if (!isAnime) {
 			urlJimakuID = `${urlJimakuID}&anime=false`;
 		}
 
 		console.log(`Fetching Jimaku ID from: ${urlJimakuID}`);
-		const jimakuData = await getJimakuIDJSON(urlJimakuID);
-		const jimakuID = jimakuData[0]?.id;
+		let jimakuData = await getJimakuIDJSON(urlJimakuID);
+		let jimakuID = jimakuData[0]?.id;
 
 		if (!jimakuID) {
 			console.error("No Jimaku ID found for the title");
-			return { subtitles: [] };
+			if (fallbackApiTitle) {
+				console.log("Trying with fallbackApiTitle");
+				encodedTitle = encodeURIComponent(fallbackApiTitle);
+				urlJimakuID = `entries/search?query=${encodedTitle}`;
+				console.log(`Fetching Jimaku ID from: ${urlJimakuID}`);
+				jimakuData = await getJimakuIDJSON(urlJimakuID);
+				jimakuID = jimakuData[0]?.id;
+				if (!jimakuID) {
+					console.error("No Jimaku ID found for the fallbackApiTitle");
+					return { subtitles: [] };
+				}
+			}
 		}
 
 		const urlJimakuFiles =
@@ -127,9 +141,32 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 					url: file.url,
 					lang: "jpn",
 				}));
-
-			console.log("Subtitles fetched:", subtitles);
-			return { subtitles };
+			if (subtitles.length > 0) {
+				console.log("Subtitles fetched:", subtitles);
+				return { subtitles };
+			}
+			if (subtitles.length === 0) {
+				const assSubtitles = subtitleFiles
+					.filter((file) => file.name.endsWith(".ass"))
+					.map(async (file) => ({
+						id: file.name,
+						url: await convertAssToSrtFromUrltoJimaku(
+							file.url,
+							jimakuID,
+							episode,
+						),
+						lang: "jpn",
+					}));
+				if (assSubtitles.length > 0) {
+					const assSubtitlesPromisesResolved = await Promise.all(assSubtitles);
+					console.log("Subtitles fetched:", assSubtitles);
+					return { subtitles: assSubtitlesPromisesResolved };
+				}
+				console.log("No subtitles");
+				return { subtitles: [] };
+			}
+			console.log("No subtitles");
+			return { subtitles: [] };
 		}
 	} catch (error) {
 		console.error("Error handling subtitle request:", error);
