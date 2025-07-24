@@ -239,4 +239,12 @@ serveHTTP(myInterface, {
 
 console.log(`Stremio add-on is running on http://localhost:${port}`);
 
-// publishToCentral("https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club/manifest.json")
+// Publish to Stremio's central addon registry
+(async () => {
+	try {
+		await publishToCentral("https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club/manifest.json");
+		console.log("Successfully published to Stremio central registry");
+	} catch (error) {
+		console.error("Failed to publish to central registry:", error);
+	}
+})();
