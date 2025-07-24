@@ -238,3 +238,5 @@ serveHTTP(myInterface, {
 });
 
 console.log(`Stremio add-on is running on http://localhost:${port}`);
+
+publishToCentral("https://my-addon.awesome/manifest.json")
