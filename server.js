@@ -1,4 +1,4 @@
-const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
+const { addonBuilder, serveHTTP, publishToCentral } = require("stremio-addon-sdk");
 const bent = require("bent");
 const { convertAssToSrtFromUrl } = require("./getSubtitle.js");
 const express = require("express");
@@ -239,4 +239,4 @@ serveHTTP(myInterface, {
 
 console.log(`Stremio add-on is running on http://localhost:${port}`);
 
-publishToCentral("https://my-addon.awesome/manifest.json")
+publishToCentral("https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club/manifest.json")
