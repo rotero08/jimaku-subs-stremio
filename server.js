@@ -230,6 +230,11 @@ builder.defineSubtitlesHandler(async ({ type, id, config }) => {
 
 const myInterface = builder.getInterface();
 
+// Add health check endpoint to existing app
+app.get('/health', (req, res) => {
+	res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Use serveHTTP with the addon interface and our Express app
 serveHTTP(myInterface, { 
 	port: port,

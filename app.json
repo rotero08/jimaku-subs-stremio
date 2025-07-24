@@ -1,0 +1,25 @@
+{
+  "healthchecks": {
+    "web": [
+      {
+        "type": "startup",
+        "name": "manifest check",
+        "description": "Checking if the addon manifest is accessible",
+        "path": "/manifest.json",
+        "attempts": 5,
+        "timeout": 10,
+        "wait": 5,
+        "initialDelay": 10
+      },
+      {
+        "type": "readiness", 
+        "name": "health check",
+        "description": "Checking if the addon is ready to serve requests",
+        "path": "/",
+        "attempts": 3,
+        "timeout": 5,
+        "wait": 3
+      }
+    ]
+  }
+}
