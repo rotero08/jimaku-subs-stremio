@@ -26,7 +26,7 @@ const manifest = {
 	resources: ["subtitles"],
 	types: ["movie", "series"],
 	name: "Jimaku Subtitles v2",
-	description: "Japanese subtitles for anime from Jimaku.cc community database. Automatically finds and serves Japanese subtitles for anime content, with support for both SRT and ASS formats. Works best with Kitsu anime addon for optimal content detection and metadata matching.",
+	description: "Get Japanese subtitles for anime from Jimaku.cc community database. Works best with Kitsu anime addon for proper anime detection and metadata.",
 	behaviorHints: {
 		configurable: true,
 		configurationRequired: true,
@@ -45,7 +45,7 @@ const manifest = {
 			required: false,
 		},
 	],
-	description: "SETUP INSTRUCTIONS:\n\n1. INSTALL KITSU ADDON FIRST: In Stremio, search for 'Kitsu' addon and install it. This provides anime metadata and makes subtitle detection much more reliable.\n\n2. GET JIMAKU API KEY: Sign up at jimaku.cc, go to your account settings, and copy your API key.\n\n3. OPTIONAL: Get OMDb API key from omdbapi.com for better movie support.\n\nHOW IT WORKS: This addon finds Japanese subtitles from the Jimaku.cc community database. When you watch anime (especially from Kitsu), it automatically searches for matching Japanese subtitles and converts formats when needed.",
+	//description: "SETUP INSTRUCTIONS:\n\n1. INSTALL KITSU ADDON FIRST: In Stremio, search for 'Kitsu' addon and install it. This provides anime metadata and makes subtitle detection much more reliable.\n\n2. GET JIMAKU API KEY: Sign up at jimaku.cc, go to your account settings, and copy your API key.\n\n3. OPTIONAL: Get OMDb API key from omdbapi.com for better movie support.\n\nHOW IT WORKS: This addon finds Japanese subtitles from the Jimaku.cc community database. When you watch anime (especially from Kitsu), it automatically searches for matching Japanese subtitles and converts formats when needed.",
 };
 
 const builder = new addonBuilder(manifest);
