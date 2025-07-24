@@ -27,6 +27,7 @@ const manifest = {
 	types: ["movie", "series"],
 	name: "Jimaku Subtitles v2",
 	description: "Get Japanese subtitles for anime from Jimaku.cc community database. Works best with Kitsu anime addon for proper anime detection and metadata.",
+	icon: "https://raw.githubusercontent.com/rotero08/jimaku-subs-stremiov2/main/icon.png", // Add your icon URL here
 	behaviorHints: {
 		configurable: true,
 		configurationRequired: true,
