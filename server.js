@@ -239,4 +239,4 @@ serveHTTP(myInterface, {
 
 console.log(`Stremio add-on is running on http://localhost:${port}`);
 
-publishToCentral("https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club/manifest.json")
+// publishToCentral("https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club/manifest.json")
