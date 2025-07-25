@@ -507,10 +507,10 @@ app.listen(PORT, () => {
             try {
                 console.log(`📡 Auto-publishing to Stremio Central (production deployment)...`);
                 
-                // Use the same approach as the SDK - just send the manifest URL
+                // Try using transportName instead of transportUrl based on error message
                 const manifestUrl = `${baseUrl}/manifest.json`;
                 const addonData = {
-                    transportUrl: manifestUrl
+                    transportName: manifestUrl
                 };
                 
                 console.log(`📡 Publishing manifest URL: ${manifestUrl}`);
