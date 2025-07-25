@@ -1,22 +1,38 @@
 const asstosrt = require("ass-to-srt");
+
 async function convertAssToSrtFromUrl(url) {
 	try {
+		console.log(`🔄 Starting ASS to SRT conversion for: ${url}`);
+		
+		// Use fetch (available in Node 18+)
 		const response = await fetch(url);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
+			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		const readable = response.body;
-		const utf8decoder = new TextDecoder();
+		// Get the response as text directly - simpler and more reliable
+		const assContent = await response.text();
+		
+		if (!assContent || assContent.trim().length === 0) {
+			throw new Error('Empty ASS content received');
+		}
 
-		let arrayString = "";
-		for await (const chunk of readable)
-			arrayString += utf8decoder.decode(chunk, { stream: true });
-		arrayString += utf8decoder.decode();
-		const output = asstosrt(arrayString);
-		return output;
+		console.log(`📝 ASS content length: ${assContent.length} characters`);
+		
+		// Convert ASS to SRT
+		const srtContent = asstosrt(assContent);
+		
+		if (!srtContent || srtContent.trim().length === 0) {
+			throw new Error('ASS to SRT conversion resulted in empty content');
+		}
+
+		console.log(`✅ ASS to SRT conversion successful, SRT length: ${srtContent.length} characters`);
+		return srtContent;
+		
 	} catch (error) {
-		console.error(error.message);
+		console.error(`❌ Error in convertAssToSrtFromUrl:`, error.message);
+		console.error(`❌ URL was: ${url}`);
+		throw error; // Re-throw to let the caller handle it
 	}
 }
 
