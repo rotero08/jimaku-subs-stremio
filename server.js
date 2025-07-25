@@ -6,9 +6,19 @@ const path = require("path");
 
 // Get the port from environment or default to 7005
 const PORT = process.env.PORT || 7006;
-const baseUrl = process.env.NODE_ENV === 'production' 
-	? process.env.BASE_URL || `http://localhost:${PORT}`
-	: `http://localhost:${PORT}`;
+
+// Determine the base URL - handle Beamup deployment correctly
+let baseUrl;
+if (process.env.BASE_URL) {
+    // Explicit BASE_URL set
+    baseUrl = process.env.BASE_URL;
+} else if (process.env.NODE_ENV === 'production') {
+    // Auto-detect Beamup URL - use your actual deployment URL
+    baseUrl = `https://56bf09e9ba27-jimaku-subs-stremiov2.baby-beamup.club`;
+} else {
+    // Development
+    baseUrl = `http://localhost:${PORT}`;
+}
 
 const getKitsuJSON = bent("https://kitsu.io/api/edge/", "GET", "json", {
 	Accept: "application/vnd.api+json",
