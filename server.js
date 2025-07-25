@@ -507,13 +507,13 @@ app.listen(PORT, () => {
             try {
                 console.log(`📡 Auto-publishing to Stremio Central (production deployment)...`);
                 
+                // Use the same approach as the SDK - just send the manifest URL
+                const manifestUrl = `${baseUrl}/manifest.json`;
                 const addonData = {
-                    transportUrl: baseUrl,
-                    manifest: manifest,
-                    tags: ["subtitles", "japanese", "anime", "community"],
-                    description: "Get Japanese subtitles for anime from Jimaku.cc community database. Requires configuration with Jimaku.cc API key. Works best with Kitsu anime addon for proper anime detection and metadata."
+                    transportUrl: manifestUrl
                 };
                 
+                console.log(`📡 Publishing manifest URL: ${manifestUrl}`);
                 const response = await postJSON('https://api.strem.io/api/addonPublish', addonData);
                 console.log("✅ Successfully auto-published to Stremio Central:", response);
                 
