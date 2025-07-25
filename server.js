@@ -99,7 +99,7 @@ app.get('/:userConfig/manifest.json', (req, res) => {
 			...manifest,
 			id: `${manifest.id}.${req.params.userConfig.substring(0, 8)}`,
 			name: `${manifest.name}`,
-			description: manifest.description.replace('/configure', `/${req.params.userConfig}/configure`),
+			description: manifest.description,
 			behaviorHints: {
 				configurable: true,
 				configurationRequired: false
