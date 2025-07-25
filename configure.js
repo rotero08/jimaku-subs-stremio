@@ -6,9 +6,9 @@ function getConfigurePage(iconUrl) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jimaku Subtitles v2 - Configuration</title>
-    <link rel="icon" type="image/png" href="${iconUrl}">
-    <link rel="shortcut icon" type="image/png" href="${iconUrl}">
-    <link rel="apple-touch-icon" href="${iconUrl}">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'><rect width='64' height='64' rx='12' fill='%233b82f6'/><text x='32' y='42' text-anchor='middle' font-family='Arial' font-size='36' font-weight='bold' fill='white'>字</text></svg>">
+    <link rel="shortcut icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'><rect width='64' height='64' rx='12' fill='%233b82f6'/><text x='32' y='42' text-anchor='middle' font-family='Arial' font-size='36' font-weight='bold' fill='white'>字</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'><rect width='64' height='64' rx='12' fill='%233b82f6'/><text x='32' y='42' text-anchor='middle' font-family='Arial' font-size='36' font-weight='bold' fill='white'>字</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>

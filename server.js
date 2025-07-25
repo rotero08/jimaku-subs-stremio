@@ -43,7 +43,7 @@ const manifest = {
 	types: ["movie", "series"],
 	idPrefixes: ["tt", "kitsu"],  // Support both IMDB and Kitsu IDs
 	name: "Jimaku Subtitles v2",
-	description: "Get Japanese subtitles for anime from Jimaku.cc community database. Configure at: " + (process.env.NODE_ENV === 'production' ? process.env.BASE_URL || `http://localhost:${PORT}` : `http://localhost:${PORT}`) + "/configure",
+	description: "Get Japanese subtitles for anime from Jimaku.cc community database. Works best with Kitsu anime addon for proper anime detection and metadata.",
 	icon: ICON_URL,
 	behaviorHints: {
 		configurable: true,
