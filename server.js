@@ -1,6 +1,7 @@
 const bent = require("bent");
 const { convertAssToSrtFromUrl } = require("./getSubtitle.js");
 const { getConfigurePage } = require("./configure.js");
+const { publishToCentral } = require("stremio-addon-sdk");
 const express = require("express");
 const path = require("path");
 
@@ -30,9 +31,6 @@ const getJimakuIDJSONSetup = (apiKey) =>
 	});
 const getOMDbJSONSetup = (apiKey) =>
 	bent(`https://www.omdbapi.com/?apikey=${apiKey}&`, "GET", "json");
-
-// HTTP client for publishing to Stremio Central
-const postJSON = bent("POST", "json", 200, 201, 202);
 
 // Icon URL as constant to avoid any encoding issues - back to jsdelivr CDN which works
 const ICON_URL = "https://cdn.jsdelivr.net/gh/rotero08/jimaku-subs-stremiov2/icon.png";
@@ -505,27 +503,22 @@ app.listen(PORT, () => {
     if (process.env.NODE_ENV === 'production') {
         (async () => {
             try {
-                console.log(`📡 Auto-publishing to Stremio Central (production deployment)...`);
+                console.log(`📡 Auto-publishing to Stremio Central using SDK (production deployment)...`);
                 
-                // Try using transportName instead of transportUrl based on error message
+                // Use the official Stremio SDK - same approach as your previous working code
                 const manifestUrl = `${baseUrl}/manifest.json`;
-                const addonData = {
-                    transportName: manifestUrl
-                };
-                
                 console.log(`📡 Publishing manifest URL: ${manifestUrl}`);
-                const response = await postJSON('https://api.strem.io/api/addonPublish', addonData);
-                console.log("✅ Successfully auto-published to Stremio Central:", response);
+                
+                await publishToCentral(manifestUrl);
+                console.log("✅ Successfully auto-published to Stremio Central using SDK!");
                 
             } catch (error) {
                 console.error("⚠️ Failed to auto-publish to Stremio Central:", error.message);
                 // Don't crash the server if publishing fails
-                if (error.statusCode === 409) {
+                if (error.message && error.message.includes('already exists')) {
                     console.log("ℹ️ Addon might already be published with this ID - this is normal");
-                } else if (error.statusCode === 400) {
-                    console.log("ℹ️ Manifest validation failed - check your addon configuration");
                 } else {
-                    console.log("ℹ️ You can manually publish later using the publish script");
+                    console.log("ℹ️ You can manually publish later if needed");
                 }
             }
         })();
