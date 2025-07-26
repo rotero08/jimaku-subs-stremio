@@ -32,8 +32,8 @@ const getJimakuIDJSONSetup = (apiKey) =>
 const getOMDbJSONSetup = (apiKey) =>
 	bent(`https://www.omdbapi.com/?apikey=${apiKey}&`, "GET", "json");
 
-// Icon URL as constant to avoid any encoding issues - back to jsdelivr CDN which works
-const ICON_URL = "https://cdn.jsdelivr.net/gh/rotero08/jimaku-subs-stremiov2/icon.png";
+// Icon URL as constant to avoid any encoding issues - use local file for better control
+const ICON_URL = `${baseUrl}/icon.png`;
 
 const manifest = {
 	id: "community.jimakusub.v2",
@@ -45,10 +45,14 @@ const manifest = {
 	name: "Jimaku Subtitles v2",
 	description: "Get Japanese subtitles for anime from Jimaku.cc community database. Works best with Kitsu anime addon for proper anime detection and metadata.",
 	icon: ICON_URL,
+	"stremioAddonsConfig": {
+		"issuer": "https://stremio-addons.net",
+		"signature": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.._lqf7gOkdIFimbAlTD8g7Q.eVQYjktZnC1FWlOybUQqJR3-AX2DfU4HtCWiVSN6ZqzE_e9wBkPbtynEQ9Xhxl6bj6Jj38Sc2-RTRfdRyrm2w9w128IzJvKE6LIouFhSO1qXB6_mH5uMPy1TzMduOLsh.C1khxFtQh5Y38gfAEa11_A"
+	},
 	behaviorHints: {
 		configurable: true,
 		configurationRequired: true,
-	}
+	},
 };
 
 // In-memory storage for converted subtitles
